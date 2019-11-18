@@ -1,6 +1,6 @@
 package scalas
 
-object DataTypes {
+object DataTypeDemo {
   def main(args: Array[String]): Unit = {
     createDataTypes
   }
