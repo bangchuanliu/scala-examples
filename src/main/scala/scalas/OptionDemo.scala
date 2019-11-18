@@ -2,25 +2,28 @@ package scalas
 
 object OptionDemo {
   def main(args: Array[String]): Unit = {
-    printOption
+    flattenOption
+    reduceOption
   }
   
-  def printOption(): Unit = {
-    val list = List(Some(1), None, Some(2))
-    list.flatten.foreach(print(_)) //12
-
-    val list2 = List(Some(1), None, None)
-    list2.flatten.foreach(print(_)) //1
-
-    val list3 = List(None, None, None)
-    list3.flatten.foreach(print(_)) //
-
-    println
-    val o1 = Some(1)
-    val o2 = None
+  def flattenOption(): Unit = {
+    // None is removed after flatten
+    List(Some(1), None, Some(2)).flatten.foreach(print(_)) //12
     
-    o1.foreach(println((_)))
-    o2.foreach(println((_)))
+    // use option map or option foreach versus get, getOrElse
+    Some(1).foreach(println(_)) // 1
+    None.foreach(println(_))
+    
+    // use map
+    Some(1).map(_ * 2).foreach(println(_))
+  }
+  
+  def reduceOption(): Unit = {
+    // throw exception
+//    println(List(1,2,3).drop(3).reduce((x, y) => x / (x+y)))
+    
+    // use option
+    List(1,2,3).drop(3).reduceOption((x, y) => x / (x+y)).foreach(println(_))
   }
   
   

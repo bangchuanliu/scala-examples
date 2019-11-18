@@ -1,0 +1,9 @@
+build/
+.gradle
+.gradle/*
+.idea/*
+.idea
+spark-examples.iml
+spark-examples.ipr
+spark-examples.iws
+.idea/workspace.xml
