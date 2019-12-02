@@ -1,6 +1,6 @@
 package scalas
 
-object ExceptionDemo {
+object ErrorHandling {
 
   def main(args: Array[String]): Unit = {
     catches

@@ -1,6 +1,6 @@
 package scalas
 
-object DataTypeDemo {
+object DataStructure {
   def main(args: Array[String]): Unit = {
     createDataTypes
   }
@@ -18,4 +18,7 @@ object DataTypeDemo {
     val x = 3
     var y = 4
   }
+  
+  
+
 }
