@@ -1,13 +1,9 @@
-package spark
-
-
+package dataframe
 
 object SparkDateFrame extends AbstractSpark {
   
   def main(args: Array[String]): Unit = {
     spark.range(2).toDF().show
-
-    import spark.implicits._
     
     println(spark.range(5).toDF.schema)
     
