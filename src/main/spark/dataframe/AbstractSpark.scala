@@ -1,5 +1,7 @@
 package dataframe
 
+import org.apache.spark.sql.SparkSession
+
 class AbstractSpark {
   protected val spark = SparkSession.builder
     .master("local")
