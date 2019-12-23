@@ -8,7 +8,6 @@ spark-examples.ipr
 spark-examples.iws
 .DS_Store
 .idea/
-build.sbt
 project/
 scala-examples.iml
 target/
