@@ -1,57 +1,134 @@
 package dataframe
 
-import org.apache.spark.sql.{DataFrame, Row}
-import org.apache.spark.sql.types.{DataType, IntegerType, StringType, StructField, StructType}
+import java.util.Date
 
-import scala.collection.mutable.ListBuffer
+import org.apache.spark.sql._
+import org.apache.spark.sql.functions._
 
-object SparkDateFrame extends AbstractSpark {
+case class Person(name: String, age: Int)
+
+object SparkDateFrame {
+
+  val spark = SparkSession
+    .builder()
+    .master("local")
+    .appName("spark")
+    .getOrCreate()
+
+  import spark.implicits._
+
+  case class Notification(recipientMemberUrn: String,
+                          recipientContractUrn: String,
+                          entityUrn: String,
+                          notificationTime: Long)
+
+  val data = List(
+    Notification("urn:li:member:87160834", "urn:li:contract:18615004", "urn:li:salesPotentialBuyerNotification:(urn:li:seniority:1,urn:li:function:-1,urn:li:geo:100027885,urn:li:organization:1035)", new Date().getTime - 1000 * 3600 * 12),
+    Notification("urn:li:member:87160834", "urn:li:contract:18615004", "urn:li:salesPotentialBuyerNotification:(urn:li:seniority:2,urn:li:function:-1,urn:li:geo:100027885,urn:li:organization:1035)", new Date().getTime - 1000 * 3600 * 12),
+    Notification("urn:li:member:87160834", "urn:li:contract:18615005", "urn:li:salesPotentialBuyerNotification:(urn:li:seniority:3,urn:li:function:2,urn:li:geo:100027885,urn:li:organization:1036)", new Date().getTime - 1000 * 3600 * 72),
+    Notification("urn:li:member:87160834", "urn:li:contract:18615005", "urn:li:salesPotentialBuyerNotification:(urn:li:seniority:4,urn:li:function:2,urn:li:geo:100027885,urn:li:organization:1035)", new Date().getTime - 1000 * 3600 * 96),
+    Notification("urn:li:member:87160834", "urn:li:contract:18615005", "urn:li:salesPotentialBuyerNotification:(urn:li:seniority:5,urn:li:function:2,urn:li:geo:100027885,urn:li:organization:1035)", new Date().getTime - 1000 * 3600 * 24 * 10)
+  )
 
   def main(args: Array[String]): Unit = {
-    createDataFrame
-  }
-  
-  
-  def highOrderFunction(): Unit = {
-    import spark.implicits._
-
-    spark.range(2).toDF().show
-
-    println(spark.range(5).toDF.schema)
-
-    val d1 = Seq(1, 2, 3, 4, 5).toDF()
-    val d2 = Seq(1, 3, 5, 7).toDF()
-
-    // except
-    d1.except(d2).show()
-
-    // union
-    d1.union(d2).show()
-
-    // union and dedupe
-    d1.union(d2).distinct().show()
-
-    // left anti
-    d1.join(d2, Seq("value"), "left_anti").show()
+    splitColumn
+    //    dateOp
   }
 
-  case class Person(name: String, age: Int)
+  def dateOp() = {
+    //    data.toDF.select(date_sub(to_date(from_unixtime($"time"/1000)), 1)).show
+    data.toDF.filter(to_date(from_unixtime($"notificationTime" / 1000)) > date_sub(current_date(), 1)).show()
+  }
 
-  def createDataFrame(): Unit = {
-    import spark.implicits._
-    var persons = ListBuffer[Person]()
-    for (i <- 1 to 4) {
-      val p = Person("a" + i, i)
-      persons += p
+  def splitColumn(): Unit = {
+    val df = data.toDF().select($"recipientMemberUrn", $"recipientContractUrn",
+      regexp_extract($"entityUrn", ".*:seniority:(.{0,5}),.*", 1).alias("seniority"),
+      regexp_extract($"entityUrn", ".*:function:(.{0,5}),.*", 1).alias("function"),
+      regexp_extract($"entityUrn", ".*:geo:(.{0,50}),.*", 1).alias("geo"),
+      regexp_extract($"entityUrn", ".*:organization:(.{0,50})\\).*", 1).alias("organization")
+    )
+
+    df.groupBy("recipientMemberUrn", "recipientContractUrn").count().sort("count")
+      .show(false)
+
+    def splitColumn(): Unit = {
+      val df = data.toDF().select($"recipientMemberUrn", $"recipientContractUrn",
+        regexp_extract($"entityUrn", ".*:seniority:(.{0,5}),.*", 1).alias("seniority"),
+        regexp_extract($"entityUrn", ".*:function:(.{0,5}),.*", 1).alias("function"),
+        regexp_extract($"entityUrn", ".*:geo:(.{0,50}),.*", 1).alias("geo"),
+        regexp_extract($"entityUrn", ".*:organization:(.{0,50})\\).*", 1).alias("organization")
+      )
     }
-    val schema = StructType(Array(
-      StructField("name", StringType, nullable = true),
-      StructField("age", IntegerType, nullable = true)
-    ))
-    val row = Row(persons.toList)
-    val sc = spark.sparkContext
-    val df = spark.createDataFrame(sc.parallelize(Array(row)), schema)
-    df.show()
-  }
+    // union and dedupe
+    //    d1.union(d2).distinct().show()
+    //
+    //    // left anti
+    //    d1.join(d2, Seq("value"), "left_anti").show()
+    //    df.groupBy("recipientMemberUrn", "recipientContractUrn").count().sort("count")
+    //      .show(false)
 
-}
+    //   val df1 = df.groupBy("recipientMemberUrn", "recipientContractUrn")
+    //      .agg(
+    //        count("*").alias("cnt"),
+    //        max("cnt").as("maxCnt")
+    //      )
+    //      .sort("recipientMemberUrn", "recipientContractUrn","cnt")
+    //     .show(false)
+
+    //  val df2 =  
+    //    df.groupBy("recipientMemberUrn", "recipientContractUrn","organization")
+    //      .count
+    //      .sort("recipientMemberUrn", "recipientContractUrn","organization","count")
+    //      .withColumnRenamed("count", "memberContractOrg")
+    //      .withColumn("memberContractOrgGeo", lit(0))
+    //      .withColumn("memberContractOrgGeoFun", lit(0))
+    //
+    //  val df3 =   df.groupBy("recipientMemberUrn", "recipientContractUrn","organization", "geo")
+    //    .count
+    //    .sort("recipientMemberUrn", "recipientContractUrn","organization","geo","count")
+    //    .withColumnRenamed("count", "memberContractOrgGeo")
+    //    .withColumn("memberContractOrgGeoFun", lit(0))
+
+    //df.groupBy("recipientMemberUrn", "recipientContractUrn","organization", "geo", "function")
+    //  .count
+    //  .sort("recipientMemberUrn", "recipientContractUrn","organization","geo","function","count")
+    //  .withColumnRenamed("count", "memberContractOrgGeoFun")
+    //  .show(false)
+    //
+    //
+    //    df.groupBy("recipientMemberUrn", "recipientContractUrn","organization", "geo", "function")
+    //      .count
+    //      .sort("recipientMemberUrn", "recipientContractUrn","organization","geo","function","count")
+    //      .coalesce(1).write.mode(SaveMode.Overwrite).option("header", "true").csv("data/spark/1")
+
+
+    def highOrderFunction(): Unit = {
+      import spark.implicits._
+
+      spark.range(2).toDF().show
+
+      println(spark.range(5).toDF.schema)
+
+      val d1 = Seq(1, 2, 3, 4, 5).toDF()
+      val d2 = Seq(1, 3, 5, 7).toDF()
+
+      // except
+      d1.except(d2).show()
+
+      // union
+      d1.union(d2).show()
+
+      // union and dedupe
+      d1.union(d2).distinct().show()
+
+      // left anti
+      d1.join(d2, Seq("value"), "left_anti").show()
+    }
+
+    case class Person(name: String, age: Int)
+
+    def writeFile() = {
+      val data = spark.read.json("src/main/resources/urn.json")
+      data.write.format("avro").save("p.avro")
+    }
+  }
