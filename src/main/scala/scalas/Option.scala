@@ -2,8 +2,17 @@ package scalas
 
 object Option {
   def main(args: Array[String]): Unit = {
-    flattenOption
-    reduceOption
+//    flattenOption
+//    reduceOption
+    
+//    val str = "urn:li:organizationModule:(urn:li:organization:5388564,HIGHLIGHT_REEL)"
+    val str = null
+//    val dd = str.split(":").last.split(",")(0)
+    val data = Some(str).map(s => (str.split(":").last.split(",")(0))).getOrElse(-1)
+//    println(data.foreach(println(_)))
+    println(data)
+
+//    map(orgId => orgId.splitAt(",").take)
   }
 
   def flattenOption(): Unit = {
