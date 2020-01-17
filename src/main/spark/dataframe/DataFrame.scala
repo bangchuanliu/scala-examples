@@ -2,25 +2,14 @@ package dataframe
 
 import java.util.Date
 
+import common.AbstractSpark
 import org.apache.spark.sql._
 import org.apache.spark.sql.functions._
 
 case class Person(name: String, age: Int)
 
-object SparkDateFrame {
-
-  val spark = SparkSession
-    .builder()
-    .master("local")
-    .appName("spark")
-    .getOrCreate()
-
+object SparkDateFrame extends AbstractSpark{
   import spark.implicits._
-
-  case class Notification(recipientMemberUrn: String,
-                          recipientContractUrn: String,
-                          entityUrn: String,
-                          notificationTime: Long)
 
   val data = List(
     Notification("urn:li:member:87160834", "urn:li:contract:18615004", "urn:li:salesPotentialBuyerNotification:(urn:li:seniority:1,urn:li:function:-1,urn:li:geo:100027885,urn:li:organization:1035)", new Date().getTime - 1000 * 3600 * 12),
@@ -131,4 +120,4 @@ object SparkDateFrame {
       val data = spark.read.json("src/main/resources/urn.json")
       data.write.format("avro").save("p.avro")
     }
-  }
+  }}

@@ -1,15 +1,10 @@
 package rdd
 
+import common.AbstractSpark
 import org.apache.spark.sql.SparkSession
 
-object RDD {
-  
-  val spark = SparkSession
-    .builder()
-    .master("local")
-    .appName("spark")
-    .getOrCreate()
-  
+object Rdd extends AbstractSpark{
+
   import spark.implicits._
 
   def main(args: Array[String]): Unit = {

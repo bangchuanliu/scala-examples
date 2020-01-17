@@ -1,5 +1,6 @@
 package sql
 
+import common.AbstractSpark
 import org.apache.spark.sql._
 
 object Select extends AbstractSpark {
@@ -10,20 +11,7 @@ object Select extends AbstractSpark {
 
   def main(args: Array[String]): Unit = {
 //    columnUsage
-    join()
   }
-  
-
-  def join() = {
-    val df1 = List(User("kevin", 21), User("peter", 32)).toDF
-    val df2 = List(User("kevin", 21), User("jason", 33)).toDF
-    
-    df1.join(df2).show(false)
-    df1.except(df2).show(false)
-    df1.join(df2, Seq("name"), "inner")
-    
-  }
-  
   
   def columnUsage(): Unit = {
     val df = List(User("kevin", 21), User("peter", 32)).toDF

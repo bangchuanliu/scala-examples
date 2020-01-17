@@ -2,6 +2,7 @@ package dataframe
 
 import org.apache.spark.sql.{DataFrame, Row}
 import org.apache.spark.sql.types.{IntegerType, StringType, StructField, StructType}
+import common.AbstractSpark
 
 object DataFrameGeneration extends AbstractSpark {
 

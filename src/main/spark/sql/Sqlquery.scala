@@ -1,5 +1,7 @@
 package sql
 
+import common.AbstractSpark
+
 object Sqlquery extends AbstractSpark {
   import spark.implicits._
   case class User(name: String, age: Int)

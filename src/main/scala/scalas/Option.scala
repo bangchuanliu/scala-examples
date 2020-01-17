@@ -5,8 +5,7 @@ object Option {
 //    flattenOption
 //    reduceOption
     
-//    val str = "urn:li:organizationModule:(urn:li:organization:5388564,HIGHLIGHT_REEL)"
-    val str = null
+    val str = "urn:li:organizationModule:(urn:li:organization:5388564,HIGHLIGHT_REEL)"
 //    val dd = str.split(":").last.split(",")(0)
     val data = Some(str).map(s => (str.split(":").last.split(",")(0))).getOrElse(-1)
 //    println(data.foreach(println(_)))
