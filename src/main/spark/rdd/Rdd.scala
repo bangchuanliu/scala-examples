@@ -1,6 +1,7 @@
 package rdd
 
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.{DataFrame, Row}
+import org.apache.spark.sql.types.{StringType, StructField, StructType}
 import utils.SparkUtil._
 object Rdd {
 
@@ -32,7 +33,7 @@ object Rdd {
       )
     )
 
-    val rowRdd = spark.sparkContext.parallelize(List(List("urn:tsp:insightTag:6917", "urn:li:contract:18615004"))).map(r => Row(Row(r.get(0), r.get(1))))
+    val rowRdd = spark.sparkContext.parallelize(List(List("urn:tsp:insightTag:6917", "urn:li:contract:18615004"))).map(r => Row(Row(r.head, r.last)))
     spark.createDataFrame(rowRdd, row)
   }
 }
