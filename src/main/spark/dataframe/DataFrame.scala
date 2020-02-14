@@ -20,8 +20,20 @@ object SparkDateFrame extends AbstractSpark{
   )
 
   def main(args: Array[String]): Unit = {
-    splitColumn
+//    splitColumn
     //    dateOp
+    zip
+  }
+
+  def zip(): Unit = {
+    val df1 = List(("1","m1")).toDF("id", "manager_name")
+    val df2 = List(("2","e1","1"), ("3", "e2","1")).toDF("id","name","manager_id")
+//    val df3 = df1.join(df2, df1("id") === df2("manager_id"),"inner").as[(String, String, String, String, String)].map {case (id, mname, eid, ename, mid) => ((id, mname),(eid, ename, mid)) }.rdd.groupByKey().map {case (k, v) => (k, v.toList)}
+    val rdd = df1.join(df2, df1("id") === df2("manager_id"),"inner").map {e => ((e.getString(0),e.getString(1)),(e.getString(2),e.getString(3),e.getString(4)))}.rdd.groupByKey().map {case (k, v) => (k, v.toList)}
+//    val df3 = df1.map(x => (x, 1)).rdd.groupByKey
+//    val df3 = df1.join(df2).rdd.groupbyK
+//    val df3 = df1 join df2 map {case (value, value) => (value, value)} groupBy 
+//    println(df3.collect().toList)
   }
 
   def dateOp() = {
@@ -48,6 +60,7 @@ object SparkDateFrame extends AbstractSpark{
         regexp_extract($"entityUrn", ".*:organization:(.{0,50})\\).*", 1).alias("organization")
       )
     }
+
     // union and dedupe
     //    d1.union(d2).distinct().show()
     //

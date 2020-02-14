@@ -23,5 +23,8 @@ object Loop {
       println(i)
       i = i + 1
     }
+    
+    val tableNames = List("anonymous_notification_1", "anonymous_notification_2")
+    println(tableNames.dropRight(10))
   }
 }
