@@ -1,9 +1,8 @@
 package rdd
 
-import common.AbstractSpark
 import org.apache.spark.sql.SparkSession
-
-object Rdd extends AbstractSpark{
+import utils.SparkUtil._
+object Rdd {
 
   import spark.implicits._
 

@@ -1,8 +1,8 @@
 package sql
 
-import common.AbstractSpark
+import utils.SparkUtil._
 
-object Sqlquery extends AbstractSpark {
+object Sqlquery {
   import spark.implicits._
   case class User(name: String, age: Int)
   def main(args: Array[String]): Unit = {

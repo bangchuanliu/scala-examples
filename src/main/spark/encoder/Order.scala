@@ -1,5 +1,5 @@
 package encoder
 
-class Order {
+class Order(food: String, price: Double) {
 
 }

@@ -1,11 +1,11 @@
 package sql
 
-import common.AbstractSpark
 import sql.Select.User
+import utils.SparkUtil.spark
 
-object Join extends AbstractSpark {
-
+object Join {
   import spark.implicits._
+  
   case class AggregatedInsightTagEvents(viewerCompanyId: Long,
                                         viewerFunctionId: Long,
                                         viewerGeoEntityId: Long,

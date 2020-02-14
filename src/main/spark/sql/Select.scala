@@ -1,13 +1,12 @@
 package sql
 
-import common.AbstractSpark
-import org.apache.spark.sql._
+import utils.SparkUtil.spark
 
-object Select extends AbstractSpark {
-  
-  case class User(name: String, age: Int)
+object Select {
   
   import spark.implicits._
+  
+  case class User(name: String, age: Int)
 
   def main(args: Array[String]): Unit = {
 //    columnUsage

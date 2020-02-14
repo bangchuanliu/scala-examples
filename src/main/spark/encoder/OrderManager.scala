@@ -1,19 +1,21 @@
 package encoder
 
-import org.apache.spark.sql.SparkSession
 import encoder.EncoderUtils._
 import utils.SparkUtil._
 
-object OrderReport {
+object OrderManager {
+
+  import spark.implicits._
 
   def main(args: Array[String]): Unit = {
-    orderEncoder
+    createOrderDataset
   }
 
-  def orderEncoder(implicit spark: SparkSession): Unit = {
-    import spark.implicits._
-    val orders = List(new Order("piza", 12.35), new Order("steak", 31))
+  def createOrderDataset: Unit = {
+    val orders = Seq(new Order("piza", 12.35), new Order("steak", 31))
     val ds = orders.toDS()
+    val ds2 = ds.map(order => (order, 1))
     ds.show(false)
+    ds2.show(false)
   }
 }

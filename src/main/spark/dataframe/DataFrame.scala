@@ -2,14 +2,21 @@ package dataframe
 
 import java.util.Date
 
-import common.AbstractSpark
-import org.apache.spark.sql._
+import models.Models.Notification
 import org.apache.spark.sql.functions._
+import utils.SparkUtil._
 
-case class Person(name: String, age: Int)
 
-object SparkDateFrame extends AbstractSpark{
+
+
+object SparkDateFrame {
+
   import spark.implicits._
+
+  def main(args: Array[String]): Unit = {
+    splitColumn
+    //    dateOp
+  }
 
   val data = List(
     Notification("urn:li:member:87160834", "urn:li:contract:18615004", "urn:li:salesPotentialBuyerNotification:(urn:li:seniority:1,urn:li:function:-1,urn:li:geo:100027885,urn:li:organization:1035)", new Date().getTime - 1000 * 3600 * 12),
@@ -18,11 +25,6 @@ object SparkDateFrame extends AbstractSpark{
     Notification("urn:li:member:87160834", "urn:li:contract:18615005", "urn:li:salesPotentialBuyerNotification:(urn:li:seniority:4,urn:li:function:2,urn:li:geo:100027885,urn:li:organization:1035)", new Date().getTime - 1000 * 3600 * 96),
     Notification("urn:li:member:87160834", "urn:li:contract:18615005", "urn:li:salesPotentialBuyerNotification:(urn:li:seniority:5,urn:li:function:2,urn:li:geo:100027885,urn:li:organization:1035)", new Date().getTime - 1000 * 3600 * 24 * 10)
   )
-
-  def main(args: Array[String]): Unit = {
-    splitColumn
-    //    dateOp
-  }
 
   def dateOp() = {
     //    data.toDF.select(date_sub(to_date(from_unixtime($"time"/1000)), 1)).show
@@ -120,4 +122,5 @@ object SparkDateFrame extends AbstractSpark{
       val data = spark.read.json("src/main/resources/urn.json")
       data.write.format("avro").save("p.avro")
     }
-  }}
+  }
+}

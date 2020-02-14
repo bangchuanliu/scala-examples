@@ -2,9 +2,11 @@ package dataframe
 
 import org.apache.spark.sql.{DataFrame, Row}
 import org.apache.spark.sql.types.{IntegerType, StringType, StructField, StructType}
-import common.AbstractSpark
+import utils.SparkUtil._
 
-object DataFrameGeneration extends AbstractSpark {
+
+
+object DataFrameGeneration {
 
   import spark.implicits._
 
