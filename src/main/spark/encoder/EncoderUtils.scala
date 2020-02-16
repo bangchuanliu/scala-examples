@@ -8,8 +8,6 @@ object EncoderUtils {
   /**
    * This encoder maps T into a single byte array (binary) field.
    */
-  //  implicit val orderEncoder = org.apache.spark.sql.Encoders.kryo[Order]
-
   implicit def single[A](implicit c: ClassTag[A]): Encoder[A] = Encoders.kryo[A](c)
 
   implicit def tuple2[A1, A2](
