@@ -1,8 +1,17 @@
 package traits
 
 import org.apache.spark.sql.Dataset
+import traits.Notification.Notification
 
-abstract class Filtering[T] {
+class Filtering extends FilteringTrait[Notification] with BuyerIntentScoreFiltering {
+  override def filter(ds: Dataset[Notification]): Dataset[Notification] = ds
+}
+
+
+
+
+class BuyerFiltering extends Filtering[Notification] {
+
+  override def filter(ds: Dataset[Notification]): Dataset[Notification] = ds
   
-  def filter(ds : Dataset[T]) : Dataset[T]
 }
