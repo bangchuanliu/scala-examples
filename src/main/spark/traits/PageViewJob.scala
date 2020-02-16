@@ -1,16 +1,10 @@
 package traits
-import utils.SparkUtil._
+
+import traits.Notification._
 
 object PageViewJob {
-  import spark.implicits._
-
   def main(args: Array[String]): Unit = {
-    val ds = List(1, 2).toDS
-
-    val filtering = new DefaultFiltering[Int]
-
-    val ds2 = filtering.filter(ds)
-    println(ds2.collect().toList)
+    val filtering = new Filtering with BuyerIntentScoreFiltering
+    filtering.filter(notification).show(false)
   }
-
 }

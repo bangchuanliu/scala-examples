@@ -18,7 +18,7 @@ class BasicIntQueue extends IntQueue {
 object BasicIntQueue {
 
   def main(args: Array[String]): Unit = {
-    withIncrementing
+    withIncrementingAndDoubling
   }
 
   def default() = {
@@ -31,6 +31,13 @@ object BasicIntQueue {
     val q = new BasicIntQueue with Incrementing
     q.put(1); q.put(2); q.put(3)
     println(q.get()); println(q.get());println(q.get())
+
+  }
+
+  def withIncrementingAndDoubling() = {
+    val q = new BasicIntQueue with Incrementing with Doubling
+    q.put(1); q.put(2);
+    println(q.get()); println(q.get())
 
   }
 }
