@@ -13,10 +13,10 @@ val scalatest = "org.scalatest" %% "scalatest" % "3.0.0" % Test
 val sparkLib = Seq(spark_core, spark_sql, spark_avro)
 val scalatestLib = Seq(scalatest, junit)
 
-lazy val lang = project
-  .in(file("scala-lang"))
+lazy val scalaLang = project
+  .in(file("scalalang"))
   .settings(
-    name := "scala-lang",
+    name := "scalaLang",
     libraryDependencies ++= scalatestLib
   )
 
