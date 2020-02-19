@@ -5,6 +5,7 @@
     <output-test url="file://$MODULE_DIR$/../spark/target/scala-2.11/test-classes" />
     <exclude-output />
     <content url="file://$MODULE_DIR$/../spark">
+      <sourceFolder url="file://$MODULE_DIR$/../spark/src/main/spark" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/../spark/target" />
     </content>
     <orderEntry type="inheritedJdk" />

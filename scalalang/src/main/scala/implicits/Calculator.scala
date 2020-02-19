@@ -1,5 +1,9 @@
 package main.scala.implicits
+
+import implicits.StringOps
 import main.scala.implicits.CalculatorImplicits._
+import implicits.StringImplicits._
+
 object Calculator {
 
   def main(args: Array[String]): Unit = {
@@ -10,10 +14,13 @@ object Calculator {
 
 
     println(n1 + n2)
+    StringOps.printImplicit
+    printImplicit
   }
 
-
-
+  def printImplicit(implicit str: String): Unit = {
+    println(str)
+  }
 
   def sum(a: Number[Int], b: Number[Int]): Number[Int] = {
     new Number(a.v + b.v)
