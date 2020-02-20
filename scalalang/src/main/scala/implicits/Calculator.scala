@@ -7,15 +7,10 @@ import implicits.StringImplicits._
 object Calculator {
 
   def main(args: Array[String]): Unit = {
-    println(join(3, 5, sum))
     val n1 = new Number(3)
     val n2 = new Number(3)
-    println(n1.join(n2, sum))
 
-
-    println(n1 + n2)
-    StringOps.printImplicit
-    printImplicit
+    StringOps.load("path1", "path2")
   }
 
   def printImplicit(implicit str: String): Unit = {
