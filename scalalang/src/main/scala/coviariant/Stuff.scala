@@ -1,0 +1,5 @@
+package coviariant
+
+class Stuff {
+
+}

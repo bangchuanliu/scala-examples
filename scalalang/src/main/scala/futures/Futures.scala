@@ -1,9 +1,9 @@
-package main.scala
+package futures
 
-import scala.concurrent.{Await, Future}
-import scala.concurrent.ExecutionContext.Implicits._
 import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, Future}
 import scala.util.{Failure, Random, Success}
+import scala.concurrent.ExecutionContext.Implicits.global
 
 object Futures {
   def main(args: Array[String]): Unit = {
@@ -11,8 +11,8 @@ object Futures {
     println("-----------------------------------------------------------------------------")
     multiFutures
   }
-  
-  
+
+
   def multiFutures() = {
     val f1 = Future {
       Thread.sleep(Random.nextInt(1000))
@@ -28,13 +28,13 @@ object Futures {
       Thread.sleep(Random.nextInt(1000))
       "China"
     }
-    
+
     val result = for {
       r1 <- f1
       r2 <- f2
       r3 <- f3
     } yield s"$r1 $r2 $r3"
-    
+
     result.foreach(value => println(s"result is $value"))
     println("A....")
     Thread.sleep(200)
@@ -47,10 +47,10 @@ object Futures {
     println("E....")
     Thread.sleep(200)
   }
-  
-  
-  
-  
+
+
+
+
   def singleFuture() = {
     val f1: Future[Int] = Future {
       Thread.sleep(Random.nextInt(1000))
