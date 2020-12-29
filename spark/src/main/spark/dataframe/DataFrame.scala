@@ -14,8 +14,20 @@ object SparkDateFrame {
   import spark.implicits._
 
   def main(args: Array[String]): Unit = {
-    splitColumn
+//    splitColumn
     //    dateOp
+    agg()
+  }
+
+  def agg(): Unit = {
+    val df = spark.read.format("org.apache.spark.csv").option("header", true).option("inferSchema", true).csv("/Users/liubangchuan/data/coursea-bigdata/daily_weather.csv")
+    val imputeDF = df
+    val removedNullDF = df.na.drop()
+    for(x <- imputeDF.columns) {
+      val meanValue = removedNullDF.agg(avg(x)).first().getDouble(0)
+      println(x, meanValue)
+      imputeDF.na.fill(meanValue, Array(x))
+    }
   }
 
   val data = List(

@@ -11,4 +11,6 @@ spark-examples.iws
 project/
 scala-examples.iml
 target/
+.bloop/
+.metals/
 
