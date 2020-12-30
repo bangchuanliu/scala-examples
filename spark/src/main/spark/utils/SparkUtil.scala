@@ -8,5 +8,6 @@ object SparkUtil {
     .builder()
     .master("local")
     .appName("spark")
+    .config("spark.worker.cores", 2)
     .getOrCreate()
 }
